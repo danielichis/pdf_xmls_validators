@@ -4,8 +4,10 @@ import pandas as pd
 from tkinter import *
 import tkinter
 import tkinter.messagebox
+from tkinter import messagebox
 from parsePdf import pdff
 from parseXml import xmll
+from validator import validates
 from tkinter import END, StringVar, filedialog
 from attr import validate
 import customtkinter
@@ -36,7 +38,7 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(7, weight=1)
 
         self.button_1 = customtkinter.CTkButton(master=self,
-                                                text="Carpeta de archivos pdfs",
+                                                text="Carpeta de archivos pdfs y xml",
                                                 fg_color=("gray75", "gray30"),  # <- custom tuple-color
                                                 command=lambda:self.button_parse("pdf"))
         self.button_1.grid(row=1, column=0, pady=10, padx=10)
@@ -156,8 +158,8 @@ class App(customtkinter.CTk):
         print(f"cantidad de archivos {ext}: {self.count_files}")
 
     def change_validar(self):
-        print("llamando a la validacion de contenido")
-        print(self.listPdfs)
+        #print("llamando a la validacion de contenido")
+        #print(self.listPdfs)
         contentPdfs=[]
         contentXmls=[]
         pdfsPath=self.listPdfs
@@ -165,8 +167,13 @@ class App(customtkinter.CTk):
             contentPdfs.append(pdff(pdf))
         for xml in self.listXml:
             contentXmls.append(xmll(xml))
-        pd.DataFrame(contentPdfs).to_csv("conteido pdfs.csv", index=False,sep=";")
-        pd.DataFrame(contentXmls).to_csv("conteido Xmls.csv", index=False,sep=";")
+        #pd.DataFrame(contentPdfs).to_csv("conteido pdfs.csv", index=False,sep=";")
+        #pd.DataFrame(contentXmls).to_csv("conteido Xmls.csv", index=False,sep=";")
+
+        df1=pd.DataFrame(contentPdfs)
+        df2=pd.DataFrame(contentXmls)
+        validates(df1,df2)
+        messagebox.showinfo("my message","this is an example of showinfo\nmessagebox")
         #print(contentPdfs)
         #print(contentXmls)
 
