@@ -1,4 +1,5 @@
 import pandas as pd
+import datetime
 def validates(df1,df2):
     df=pd.merge(df1,df2,how="outer",on=["nameFilee"])
     df.to_csv("data merged.csv")
@@ -41,19 +42,33 @@ def validates(df1,df2):
                     diferences=elem
                 else:
                     diferences=f"{diferences}-{elem}"
+
+        nombrePdf=dfm["nameFile_x"][idx]
+        nombreXml=dfm["nameFile_y"][idx]
+        ruc_emisor=dfm["RUC EMISOR_x"][idx]
+        tipoDocumento=dfm["TIPO DOCUMENTO_x"][idx]
+        serie=dfm["SERIE_x"][idx]
+        numeroDocumento=dfm["NUMERO COMPROBATE_x"][idx]
+
+        if estado.find("falta")!=-1:
+            ruc_emisor=""
+            tipoDocumento=""
+            serie=""
+            numeroDocumento=""
+            diferences=""
         result={
-            'NOMBRE PDF':dfm["nameFile_x"][idx],
-            'NOMBRE XML':dfm["nameFile_y"][idx],
+            'NOMBRE PDF':nombrePdf,
+            'NOMBRE XML':nombreXml,
             'ESTADO':estado,
-            'RUC EMISOR':dfm["RUC EMISOR_x"][idx],
-            'TIPO DOCUMENTO':dfm["TIPO DOCUMENTO_x"][idx],
-            'SERIE':dfm["SERIE_x"][idx],
-            'NUMERO DE DOCUMENTO':dfm["NUMERO COMPROBATE_x"][idx],
+            'RUC EMISOR':ruc_emisor,
+            'TIPO DOCUMENTO':tipoDocumento,
+            'SERIE':serie,
+            'NUMERO DE DOCUMENTO':numeroDocumento,
             'DIFERENCIAS ENCONTRADAS':diferences,
         }
         results.append(result)
     #dfm.to_csv("data_merge.csv",sep=";")
     #print(merge_dict)
     df_final=pd.DataFrame(results)
-    df_final.to_csv("reporte.csv",sep=";",index=False)   
+    df_final.to_csv(f"Reporte{datetime.datetime.today().strftime('%m%d%Y%H%M%S')}.csv",sep=";",index=False)   
 
