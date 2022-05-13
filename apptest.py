@@ -15,7 +15,7 @@ import sys
 import os
 
 #customtkinter.ScalingTracker.set_user_scaling(0.5)
-customtkinter.set_appearance_mode("standard")  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("green")
 
 class App(customtkinter.CTk):
@@ -43,11 +43,11 @@ class App(customtkinter.CTk):
                                                 command=lambda:self.button_parse("pdf"))
         self.button_1.grid(row=1, column=0, pady=10, padx=10)
 
-        self.button_2 = customtkinter.CTkButton(master=self,
-                                                text="Carpeta de archivos xml",
-                                                fg_color=("gray75", "gray30"),  # <- custom tuple-color
-                                                command=lambda:self.button_parse("xml"))
-        self.button_2.grid(row=4, column=0, pady=10, padx=10)
+        #self.button_2 = customtkinter.CTkButton(master=self,
+                                                #text="Carpeta de archivos xml",
+                                                #fg_color=("gray75", "gray30"),  # <- custom tuple-color
+                                                #command=lambda:self.button_parse("xml"))
+        #self.button_2.grid(row=4, column=0, pady=10, padx=10)
 
         self.button_3 = customtkinter.CTkButton(master=self,
                                                 text="VALIDAR",
@@ -93,29 +93,28 @@ class App(customtkinter.CTk):
         #ext="pdf"
         print(self.folderPdfs)
         directory = os.fsencode(self.folderPdfs)
-        self.count_files=0
+        self.count_files_1=0
+        self.count_files_2=0
         for file in os.listdir(directory):
             filename = os.fsdecode(file)
             #print(filename)
-            if filename.endswith(f".{ext}"):
-                self.count_files=self.count_files+1
+            if filename.endswith(f".pdf"):
+                self.count_files_1=self.count_files_1+1
                 filePath=f"{self.folderPdfs}/{filename}"
-                #print(filePath)
-                #print(os.path.join(str(directory), str(filename)))
-                #print(filePath)
-                #filePath=os.path.join(directory, filename)
-                if ext=="pdf":
-                    self.listPdfs.append(filePath)
-                    self.e1.delete(0,END)
-                    self.e1.insert(0,self.count_files)
-                if ext=="xml":
-                    self.listXml.append(filePath)
-                    self.e2.delete(0,END)
-                    self.e2.insert(0,self.count_files)
+                self.listPdfs.append(filePath)
+                self.e1.delete(0,END)
+                self.e1.insert(0,self.count_files_1)
+            if filename.endswith(f".xml"):
+                self.count_files_2=self.count_files_2+1
+                filePath=f"{self.folderPdfs}/{filename}"
+                self.listXml.append(filePath)
+                self.e2.delete(0,END)
+                self.e2.insert(0,self.count_files_2)
                 continue
             else:
                 continue
-        print(f"cantidad de archivos {ext}: {self.count_files}")
+        print(f"cantidad de archivos pdf: {self.count_files_1}")
+        print(f"cantidad de archivos xml: {self.count_files_2}")
         
         
     def button_parse_xml(self):
@@ -173,16 +172,16 @@ class App(customtkinter.CTk):
         df1=pd.DataFrame(contentPdfs)
         df2=pd.DataFrame(contentXmls)
         validates(df1,df2)
-        messagebox.showinfo("my message","this is an example of showinfo\nmessagebox")
+        messagebox.showinfo("IMPORTANTE!!","VALIDACION FINALIZADA\nVER ARCHIVO REPORTE.CSV")
         #print(contentPdfs)
         #print(contentXmls)
 
     def change_mode(self):
         
         if self.switch_2.get() == 1:
-            customtkinter.set_appearance_mode("dark")
-        else:
             customtkinter.set_appearance_mode("light")
+        else:
+            customtkinter.set_appearance_mode("dark")
 
     def on_closing(self, event=0):
         self.destroy()
